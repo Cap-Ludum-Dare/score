@@ -1,0 +1,18 @@
+package se.capgemini.score.score.controller;
+
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+public class Controller {
+
+    @GetMapping("/")
+    public String getScore() {
+        return "SCORE!!";
+    }
+
+    @GetMapping("/high")
+    public String getHighScore() {
+        return "HIGH SCORE!!";
+    }
+}
