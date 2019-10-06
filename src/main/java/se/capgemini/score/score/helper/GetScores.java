@@ -18,7 +18,7 @@ public class GetScores {
     private MySqlClient client;
 
     public List<Score> getScores() {
-        List<Score> list = call("SELECT * FROM scoredb ORDER BY score DESC LIMIT 50");
+        List<Score> list = call("SELECT * FROM scoredb ORDER BY score DESC LIMIT 15");
         if (list != null) return list;
         return null;
     }
