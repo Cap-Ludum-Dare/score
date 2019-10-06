@@ -16,12 +16,10 @@ public class PostScore {
     public void postScore(String username, String score) {
         Connection con = client.getConnection();
         try {
-            String query = "INSERT INTO score(username,score) VALUES ('" + username + "','" + score + "')";
+            String query = "INSERT INTO scoredb(username,score) VALUES ('" + username + "'," + score + ")";
             PreparedStatement preparedStatement = con
                     .prepareStatement(query);
             preparedStatement.executeUpdate();
-
-            System.out.println("Result saved!");
         } catch (SQLException e) {
             e.printStackTrace();
         }

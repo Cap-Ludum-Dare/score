@@ -2,13 +2,14 @@ package se.capgemini.score.score.helper;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import se.capgemini.score.score.model.Score;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 public class GetScores {
@@ -16,16 +17,40 @@ public class GetScores {
     @Autowired
     private MySqlClient client;
 
-    public Map<String, String> getScores() {
+    public List<Score> getScores() {
+        List<Score> list = call("SELECT * FROM scoredb ORDER BY score DESC LIMIT 50");
+        if (list != null) return list;
+        return null;
+    }
+
+    public List<Score> getHighScore() {
+        List<Score> list = call("SELECT * FROM scoredb ORDER BY score DESC LIMIT 1");
+        if (list != null) return list;
+        return null;
+    }
+
+    public List<Score> getTop() {
+        List<Score> list = call("SELECT * FROM scoredb ORDER BY score DESC LIMIT 3");
+        if (list != null) return list;
+        return null;
+    }
+
+    private List<Score> call(String s) {
         Connection con = client.getConnection();
         try {
-            PreparedStatement preparedStatement = con.prepareStatement("SELECT * FROM scoredb ORDER BY score DESC LIMIT 10");
+            PreparedStatement preparedStatement = con.prepareStatement(s);
             ResultSet resultSet = preparedStatement.executeQuery();
 
-            Map list = new HashMap();
+            List<Score> list = new ArrayList<>();
+
             while (resultSet.next()) {
-                list.put(resultSet.getString("username"), resultSet.getString("score"));
+                System.out.println(resultSet.getString("idscoredb"));
+                Score score = new Score();
+                score.setUsername(resultSet.getString("username"));
+                score.setScore(Integer.valueOf(resultSet.getString("score")));
+                list.add(score);
             }
+
             System.out.println("Result: " + list.toString());
             return list;
         } catch (SQLException e) {
